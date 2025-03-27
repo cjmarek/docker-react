@@ -1,0 +1,29 @@
+# indentation matters or the yaml file won't work. He mentions that way way later on
+# This is used only as part of the CI/CD pipeline set up. I just decided to include
+# This anyway, but I never signed myself up with Travis
+
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t foo -f Dockerfile.dev .
+
+# the key words -e CI=true, keeps the build progress from hanging on the test run feedback
+script:
+  - docker run -e CI=true foo npm run test
+
+# instructions regarding deployment to AWS
+  deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "docker"
+  env: "docker-env"
+  bucket_name: "elasticbeanstalk-us-east-1-923445559289"
+  bucket_path: "docker"
+  # anytime code makes it to the master branch, that is the time to deploy
+  on:
+    branch: main
+

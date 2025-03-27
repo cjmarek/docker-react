@@ -1,0 +1,27 @@
+# indentation matters or the yaml file won't work. He mentions that way way later on
+
+# yaml file is used to invoke more than one container from a central configuration
+# doing this from one yml file puts all these containers on the same network automatically
+# this is required. need to mention the version of docker compose
+# we are using incoming port of 3000 just to prove they don't need to be the same
+#
+#NOTE, the '.' represents othe files and folders RELATIVE to where this docker-compose file IS!!! This is normal relative pathing.
+version: '3'
+# a service is synonymous with container
+services:
+# Note, the service name foowebfoo will be used to produce a friendly image ID, frontend-foowebfoo. Holy shit. No guid for an image id results from this approach
+# since we don't have the normal default name for a dockerfile, we need to use the context key word to tell docker what to look for to do a build.
+  foowebfoo:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+    # map port 3000 outside the container to 3000 inside the container (port mentioned on left of : is the local port)
+     - "3000:3000"
+    volumes:
+    # this means do not try to map outside node_modules folder to app node_modules inside the container (hence no ':')
+     - /app/node_modules
+     # map current local folder contents (outside the temp container) to app folder inside the temp container by reference (see Volumes.png)
+     # in other words, the container app folder holds references back to all relative files and folders in the current local directory
+     # so, in the Dockerfile.dev the COPY . . instruction is moot. Dockerfile.dev will still work without COPY . . instruction. But we leave it in Dockerfile as best practice.
+     - .:/app

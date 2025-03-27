@@ -1,0 +1,16 @@
+FROM node:lts-alpine
+# establish a new root folder. This overrides the default root folder
+# The real reason we do this is because it is otherwise possible that a local name might coincide with a similar name in the default root temp container, and overwrite it.
+# so instead, we create our own default root directory to copy to. (could be '/foo') creates it if not already exists.
+# From this point on, this WORKDIR becomes the default root directory indicated by the second dot.
+WORKDIR '/app'
+# copy package.json to the temporary container (used as part of the image building process). npm install will find package.json in the temp container, and will create a node_modules folder there
+# There will also be a node_modules folder in our local folder. We don't need it. So we will delete the local node_modules folder because it is huge.
+# see Volumes.png for discussion about ramifications
+COPY package.json .
+RUN npm install
+# copy everything else (i.e. any local files and folders, to the temp container root folder) these local files and folders are apt to change frequently, so, prevents re-loading of all the above
+# instruction is moot. Dockerfile.dev will still work without COPY because of what we did in docker-compose. We only need this if doing docker build at terminal
+COPY . .
+# Default start command
+CMD ["npm", "run", "start"]
