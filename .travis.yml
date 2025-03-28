@@ -1,19 +1,21 @@
 # indentation matters or the yaml file won't work. He mentions that way way later on
 # This is used only as part of the CI/CD pipeline set up. I just decided to include
 # This anyway, but I never signed myself up with Travis
-
+# Anytime we are making use of Docker, we need to establish super user permissions
 sudo: required
 language: generic
 
+# will load a copy of docker into our running container
 services:
   - docker
-
+# run commands before our test run, such as to build the Docker image
 before_install:
-  - docker build -t foo -f Dockerfile.dev .
-
-# the key words -e CI=true, keeps the build progress from hanging on the test run feedback
+  - docker build -t fooimageid -f Dockerfile.dev .
+# the commands that need to be executed to run the test suite
+# the key words -e CI=true, keeps the build progress from hanging 
+# on the test run feedback (regarding options you can do). We want travis to proceed
 script:
-  - docker run -e CI=true foo npm run test
+  - docker run -e CI=true fooimageid npm run test
 
 # instructions regarding deployment to AWS
   deploy:
