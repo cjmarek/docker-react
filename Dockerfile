@@ -13,10 +13,14 @@ COPY package.json .
 RUN npm install
 # copy local files and folders over to temp container
 COPY . .
+# When you run a build command, a build folder gets created over in the working directory (the temp container folder (/app) )
 # throw the build assets over into the build folder for production deployment
 RUN npm run build
 
+# See ProductionEnvironmentNginx.png for why nginx
 # container 2 . . . The Run phase, copy build directory over to nginx to serve the application from a nginx server
+# NOTE: All the other files (other than the build folder) are not needed in the final production folder, we only copy over the build folder.
+# so container 2 is very much smaller.
 FROM nginx
 # The container side folder structure came from the Docker hub repository documentation
 COPY --from=builder /app/build /usr/share/nginx/html

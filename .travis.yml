@@ -1,7 +1,9 @@
-# indentation matters or the yaml file won't work. He mentions that way way later on
+# indentation matters or the yml file won't work. He mentions that way way later on
 # This is used only as part of the CI/CD pipeline set up. I just decided to include
 # This anyway, but I never signed myself up with Travis
 # Anytime we are making use of Docker, we need to establish super user permissions
+
+#This file only comes into action when you do a git push
 sudo: required
 language: generic
 
@@ -18,14 +20,14 @@ script:
   - docker run -e CI=true fooimageid npm run test
 
 # instructions regarding deployment to AWS
-  deploy:
-  provider: elasticbeanstalk
-  region: "us-east-1"
-  app: "docker"
-  env: "docker-env"
-  bucket_name: "elasticbeanstalk-us-east-1-923445559289"
-  bucket_path: "docker"
-  # anytime code makes it to the master branch, that is the time to deploy
-  on:
-    branch: main
+  # deploy:
+  # provider: elasticbeanstalk
+  # region: "us-east-2"
+  # app: "frontend"
+  # env: "frontend-env"
+  # bucket_name: "elasticbeanstalk-us-east-2-422540489366"
+  # bucket_path: "frontend"
+  # # anytime code makes it to the master branch, that is the time to deploy
+  # on:
+  #   branch: master
 

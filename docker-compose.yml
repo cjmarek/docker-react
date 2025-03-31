@@ -25,4 +25,4 @@ services:
      # in other words, the container app folder holds references back to all relative files and folders in the current local directory
      # so, in the Dockerfile.dev the COPY . . instruction is moot. Dockerfile.dev will still work without COPY . . instruction. But we leave it in Dockerfile as best practice.
      - .:/app
-    command: ["npm", "run", "test"]
+    command: ["npm", "run", "start"]

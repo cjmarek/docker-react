@@ -1,0 +1,70 @@
+If you do not wish to use Travis CI, or, you have run out of credits, we have provided code and guidance to use GitHub Actions instead. GitHub Actions is a free CI/CD automation tool built directly into GitHub repositories. It eliminates the need for external services.
+
+
+
+How do I fire up the GitHub Actions CI/CD automation?
+I am not using Travis CI. I was hoping to use GitHub Actions instead. 
+
+I went ahead and followed the lessons regarding Travis CI, since I don't really have a choice.
+I wanted to see the Travis CI process play out since I assumed a similar process occurs for GitHub actions. 
+I did take the GitHub deploy.yaml and inserted that deploy.yaml into the .github/workflows directory in my repository root.
+
+Are there replacement lessons that walk me through the CI/CD automation tool built directly into GitHub repositories???
+
+
+
+name: Deploy Frontend
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker build -t cygnetops/react-test -f Dockerfile.dev .
+      - run: docker run -e CI=true cygnetops/react-test npm test
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v18
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          application_name: docker-gh
+          environment_name: Dockergh-env
+          existing_bucket_name: elasticbeanstalk-us-east-1-923445559289
+          region: us-east-1
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
+
+************************travis*******************************************
+dist: focal
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t stephengrider/docker-react -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true stephengrider/docker-react npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "docker"
+  env: "docker-env"
+  bucket_name: "elasticbeanstalk-us-east-1-923445559289"
+  bucket_path: "docker"
+  on:
+    branch: main
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
