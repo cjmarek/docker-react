@@ -14,6 +14,9 @@ But when I did a  git push origin master, the build failed??? WTF, then I realiz
 project, I was supposed to use 89-touch-gh-actions.zip. That one does not mention the AWS deployment, which is what I want since AWS is not set up by me since
 I don't want to pay for AWS.
 
+
+see E:\UDemyCourses\UdemyDockerReactCourse3\Checkpoint206\DeploymentFlowWithDocker\ActionsBuilds.png
+
 Are there replacement lessons that walk me through the CI/CD automation tool built directly into GitHub repositories??? Yes there is see....
 https://www.udemy.com/course/docker-and-kubernetes-the-complete-guide/learn/lecture/11437142#questions/17673926
 
