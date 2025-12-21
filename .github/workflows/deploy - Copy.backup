@@ -28,3 +28,11 @@ jobs:
           version_label: ${{ github.sha }}
           deployment_package: deploy.zip
 
+
+I have thrown this away. I fails because of the AWS stuff. I got this from 103-finished-gh-actions.zip it is not the correct deploy.yml
+If you look at the other .yml file, I don't mention the AWS stuff and that .yml file works.
+
+I got the other deploy.yml file out of 89-touch-gh-actions. But I had to change the - main to say master.
+I realized that 103-finished-gh-actions.zip is not the correct deploy.yml for this
+project, I was supposed to use 89-touch-gh-actions.zip. That one does not mention the AWS deployment, 
+which is what I want since AWS is not set up by me since I don't want to pay for AWS.

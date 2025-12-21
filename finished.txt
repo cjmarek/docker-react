@@ -8,11 +8,18 @@ I am not using Travis CI. I was hoping to use GitHub Actions instead.
 
 I went ahead and followed the lessons regarding Travis CI, since I don't really have a choice.
 I wanted to see the Travis CI process play out since I assumed a similar process occurs for GitHub actions. 
-I did take the GitHub deploy.yaml and inserted that deploy.yaml into the .github/workflows directory in my repository root.
 
-Are there replacement lessons that walk me through the CI/CD automation tool built directly into GitHub repositories???
+I did take the GitHub deploy.yaml from 103-finished-gh-actions.zip and inserted that deploy.yaml into the .github/workflows directory in my repository root.
+But when I did a  git push origin master, the build failed??? WTF, then I realized that 103-finished-gh-actions.zip is not the correct deploy.yml for this
+project, I was supposed to use 89-touch-gh-actions.zip. That one does not mention the AWS deployment, which is what I want since AWS is not set up by me since
+I don't want to pay for AWS.
+
+Are there replacement lessons that walk me through the CI/CD automation tool built directly into GitHub repositories??? Yes there is see....
+https://www.udemy.com/course/docker-and-kubernetes-the-complete-guide/learn/lecture/11437142#questions/17673926
 
 
+
+Wrong one (below) I got this from 103-finished-gh-actions.zip
 
 name: Deploy Frontend
 on:
