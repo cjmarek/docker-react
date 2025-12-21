@@ -1,0 +1,5 @@
+Section 7. Continuous Integration and deployment with AWS
+98. Workflow with GitHub.
+He shows how to create a feature branch.
+He shows how to push your feature branch to origin.
+He shows how to create a Pull Request.

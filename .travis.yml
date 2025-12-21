@@ -1,7 +1,8 @@
+# Travis workflow.
 # indentation matters or the yml file won't work. He mentions that way way later on
 # This is used only as part of the CI/CD pipeline set up. I just decided to include
 # This anyway, but I never signed myself up with Travis
-# Anytime we are making use of Docker, we need to establish super user permissions
+# Anytime we are making use of Docker, we need to establish super user 'sudo' permissions
 
 #This file only comes into action when you do a git push
 sudo: required
@@ -15,19 +16,21 @@ before_install:
   - docker build -t fooimageid -f Dockerfile.dev .
 # the commands that need to be executed to run the test suite
 # the key words -e CI=true, keeps the build progress from hanging 
-# on the test run feedback (regarding options you can do). We want travis to proceed
+# on the test run feedback (regarding options you can do). We want travis to proceed automatically
 script:
   - docker run -e CI=true fooimageid npm run test
 
 # instructions regarding deployment to AWS
-  # deploy:
-  # provider: elasticbeanstalk
-  # region: "us-east-2"
-  # app: "frontend"
-  # env: "frontend-env"
-  # bucket_name: "elasticbeanstalk-us-east-2-422540489366"
-  # bucket_path: "frontend"
-  # # anytime code makes it to the master branch, that is the time to deploy
-  # on:
-  #   branch: master
+  deploy:
+    provider: elasticbeanstalk
+    region: "us-east-2"
+    app: "frontend"
+    env: "frontend-env"
+    bucket_name: "elasticbeanstalk-us-east-2-422540489366"
+    bucket_path: "frontend"
+  # anytime code makes it to the master branch, that is the time to deploy
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
 

@@ -1,9 +1,9 @@
 #NOTE: Make sure that Docker is running in the background!!!!!
-# This yml file is for the development phase only. This is not for production. In fact there is no docker-compose.yml being used for production. Only Dockerfile
+#  This particular yml file deals with getting a test environment going. See the lecture for its drawbacks.
 # indentation matters or the yaml file won't work. He mentions that way way later on
 # This yaml file is a way to automate the mundane chore of enterring commands from a terminal.
 
-# yaml file is used to enable invoking more than one container from a central configuration. Only one container in this example.
+# yaml file is used to invoke more than one container from a central configuration
 # doing this from one yml file puts all these containers on the same network automatically
 # This version tag is required. Need to mention the version of docker compose
 #
@@ -11,6 +11,7 @@
 version: '3'
 # a service(s) is synonymous with container
 services:
+  # set up a container for hosting our development server
   # Note, the service name foowebfoo will be used to produce a friendly image ID, frontend-foowebfoo. Holy shit. No guid for an image id results from this approach
   # since we don't have the normal default name for a dockerfile, we need to use the context key word to tell docker what to look for to do a build.
   foowebfoo:
@@ -20,14 +21,28 @@ services:
     ports:
       # map port 3000 outside the container to 3000 inside the container (port mentioned on left of : is the local port)
       - "3000:3000"
-      # The whole concept of using volumes is only necessary in development. (To hot load any code changes in the resulting application as we develop).
+      # The whole concept of using volumes is only necessary in development. So we get any code changes to dynamically show up in the resulting application as we develop.  
     volumes: # volumes give us a way to avoid needing to perform builds each time we change source code, by mapping those changes over to the temporary container
       # .:/app is saying map everything on the source to everything in the container. Problem is there is no node_modules folder on the source to map to the node_modules folder on the container
-      # This means do not try to map the local outside node_modules folder to app node_modules inside the container (hence no ':') because there is no local node_modules
+      # This means do not try to map outside node_modules folder to app node_modules inside the container (hence no ':')
+      - /app/node_modules
+      # map current local folder contents (outside the temp container) to app folder inside the temp container by reference (see Volumes.png)
+      # in other words, the container app folder holds references back to all relative files and folders in the current local directory.
+      # so now, because of volumes, in the Dockerfile.dev, the Dockerfile.dev COPY . . instruction is moot. Dockerfile.dev will still work without COPY . . instruction. But we leave it in Dockerfile as best practice.
+      - .:/app
+  # set up a container for hosting our development test server
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      # The whole concept of using volumes is only necessary in development. So we get any code changes to dynamically show up in the resulting application as we develop.  
+    volumes: # volumes give us a way to avoid needing to perform builds each time we change source code, by mapping those changes over to the temporary container
+      # .:/app is saying map everything on the source to everything in the container. Problem is there is no node_modules folder on the source to map to the node_modules folder on the container
+      # This means do not try to map outside node_modules folder to app node_modules inside the container (hence no ':')
       - /app/node_modules
       # map current local folder contents (outside the temp container) to app folder inside the temp container by reference (see Volumes.png)
       # in other words, the container app folder holds references back to all relative files and folders in the current local directory.
       # so now, because of volumes, in the Dockerfile.dev, the Dockerfile.dev COPY . . instruction is moot. Dockerfile.dev will still work without COPY . . instruction. But we leave it in Dockerfile as best practice.
       - .:/app
       #  define the startup command when the container starts up
-    command: [ "npm", "run", "start" ]
+    command: [ "npm", "run", "test" ]

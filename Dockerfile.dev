@@ -1,3 +1,4 @@
+#NOTE: Make sure that Docker is running in the background!!!!!
 FROM node:lts-alpine
 # establish a new root folder. This overrides the default root folder
 # The real reason we do this is because it is otherwise possible that a local name might coincide with a similar name in the default root temp container, and overwrite it.
@@ -9,8 +10,10 @@ WORKDIR '/app'
 # see Volumes.png for discussion about ramifications
 COPY package.json .
 RUN npm install
-# copy everything else (i.e. any local files and folders, to the temp container root folder) these local files and folders are apt to change frequently, so, prevents re-loading of all the above
-# instruction is moot. Dockerfile.dev will still work without COPY because of what we did in docker-compose. We only need this if doing docker build at terminal
+# copy everything else (i.e. any local files and folders, to the temp container root folder) 
+# These local files and folders are apt to change frequently, so, prevents re-loading of all the above by doing the Copy last from here.
+# Copy instruction is moot now because of volumes. Dockerfile.dev will still work without COPY because of what we did in docker-compose with volumes. We only need this if doing docker build at terminal
 COPY . .
-# Default start command
+# Default start command, will start up a development server. So that is why this is not a good thing for a production environment.
+# Instead, for the production version, we will use Nginx as the web server for production, and there will not be any startup default commands mentioned in the Dockerfile for production
 CMD ["npm", "run", "start"]
