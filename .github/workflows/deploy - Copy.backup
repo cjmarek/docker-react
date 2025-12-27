@@ -29,7 +29,7 @@ jobs:
           deployment_package: deploy.zip
 
 
-I have thrown this away. I fails because of the AWS stuff. I got this from 103-finished-gh-actions.zip it is not the correct deploy.yml
+I have thrown this away. It fails because of the AWS stuff. I got this from 103-finished-gh-actions.zip it is not the correct deploy.yml
 If you look at the other .yml file, I don't mention the AWS stuff and that .yml file works.
 
 I got the other deploy.yml file out of 89-touch-gh-actions. But I had to change the - main to say master.

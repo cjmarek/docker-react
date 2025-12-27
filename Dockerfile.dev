@@ -12,7 +12,9 @@ COPY package.json .
 RUN npm install
 # copy everything else (i.e. any local files and folders, to the temp container root folder) 
 # These local files and folders are apt to change frequently, so, prevents re-loading of all the above by doing the Copy last from here.
-# Copy instruction is moot now because of volumes. Dockerfile.dev will still work without COPY because of what we did in docker-compose with volumes. We only need this if doing docker build at terminal
+# If you execute this Dockerfile from the command line, and you want volumes behavior, you need to format the docker instruction accordingly. a royal pain. So that is why we use docker-compose to set up volumes
+# Also, the port mapping is being done in the docker-copmpse file - "3000:3000"
+# Copy instruction is moot now because if you use volumes. Dockerfile.dev will still work without COPY because of what we did in docker-compose with volumes. We only need this if doing docker build at terminal
 COPY . .
 # Default start command, will start up a development server. So that is why this is not a good thing for a production environment.
 # Instead, for the production version, we will use Nginx as the web server for production, and there will not be any startup default commands mentioned in the Dockerfile for production

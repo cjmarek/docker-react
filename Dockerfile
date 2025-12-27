@@ -1,6 +1,6 @@
 #NOTE: Make sure that Docker is running in the background!!!!!
 # we are creating here a dockerfile for the production environment
-# this docker file is creating a production server, which means the code is not undergoing code changes like a dev environment would.
+# this docker file is creating a production (nginx) server, which means the code is not undergoing code changes like a dev environment would.
 # So we are not going to worry about volumes to make code changes hot load dynamically in the running application.
 # we are creating two parts where the second part is created from the first part, using the alias of 'builder' we came up with (builder could be foo)
 # container 1 . . . The build phase
@@ -35,7 +35,7 @@ COPY --from=builder /app/build /usr/share/nginx/html
 
 # my ports 8080, 8081, 8082, 8083 are already being used, 8085 is one that is still available, so none of those can be used on the right side of the xxxx:xxxx
 # The comment above is irrelevant here!
-# Since this is not a development server, (Nginx web server is a prodction server), we always use 80 as Nginx web server port. And we are not here using local IIS anyway! So
+# Since this is not a development server, (Nginx web server is a production server), we always use 80 as Nginx web server port. And we are not here using local IIS anyway! So
 # there are no port conflicts with ports 8080, 8081, 8082, 8083 are already being used as right hand ports into the application
 # https://stackoverflow.com/questions/65874912/docker-error-response-from-daemon-ports-are-not-available-listen-tcp-0-0-0-0
 #                     see AvailablePorts.png

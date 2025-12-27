@@ -1,5 +1,5 @@
 #NOTE: Make sure that Docker is running in the background!!!!!
-# This yml file is for the development phase only. This is not for production. In fact there is no docker-compose.yml being used for production. Only Dockerfile
+# This yml file is for the development phase only. This is not for production. We are using the React dev server from Reacts default 3000 port, that has been mapped to outside port 3000.
 # indentation matters or the yaml file won't work. He mentions that way way later on
 # This yaml file is a way to automate the mundane chore of enterring commands from a terminal.
 
@@ -11,14 +11,14 @@
 version: '3'
 # a service(s) is synonymous with container
 services:
-  # Note, the service name foowebfoo will be used to produce a friendly image ID, frontend-foowebfoo. Holy shit. No guid for an image id results from this approach
-  # since we don't have the normal default name for a dockerfile, we need to use the context key word to tell docker what to look for to do a build.
+  # Note, the service name foowebfoo will be used to produce a friendly image ID, 04_frontend_section_6-foowebfoo. Holy shit. No guid for an image id results from this approach
+  # since we don't have the normal default name for a dockerfile, we need to use the 'context' key word to tell docker what to look for to do a build.
   foowebfoo:
     build:
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      # map port 3000 outside the container to 3000 inside the container (port mentioned on left of : is the local port)
+      # map port 3000 outside the container to 3000 inside the container (port mentioned on left of : is the local outside port)
       - "3000:3000"
       # The whole concept of using volumes is only necessary in development. (To hot load any code changes in the resulting application as we develop).
     volumes: # volumes give us a way to avoid needing to perform builds each time we change source code, by mapping those changes over to the temporary container
